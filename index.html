@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The South-Pointing Needle</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap">
+<style>
+/* Layout: a single centred column with a sticky menu bar along the top, ruled rows instead of cards, square boxes with hard shadows and typewriter-style headings. Gold palette, a heavy rounded grotesque for headings, source links after each fact.  */
+:root {
+  --bg: #F1E4B3;
+  --grid: transparent;
+  --surface: #FAF3D7;
+  --ink: #2A2008;
+  --muted: #5C4A14;
+  --line: #CDB46A;
+  --accent: #9A7010;
+  --accent-text: #7A5806;
+  --accent-soft: #E9D48A;
+  --on-accent: #FFF8DC;
+  --bad: #A83212;
+  --bad-soft: #F5D9CC;
+  --wall: #BFAF7E;
+  --wall-hi: #DDD0A0;
+  --edge: #3A2C08;
+  --hill1: #E6D8A2;
+  --hill2: #D8C688;
+  --ground: #C2AE6C;
+  --slit: #2A2008;
+  --fire: #B3361A;
+  --brass: #D4AF37;
+  --water: #B7CDD0;
+  --duck: #8A6A4B;
+  --duck-bill: #4B4F58;
+  --duck-line: #0C2420;
+  --duck-eye: #0C2420;
+  --font-display: "Space Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-body: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Space Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #17120A; --surface: #221B0E; --ink: #F3E3B0; --muted: #BFA866; --line: #4A3C18;
+    --accent: #E0B84A; --accent-text: #EBC96A; --accent-soft: #3A2E10; --on-accent: #1A1304; --bad: #FF9A7A; --bad-soft: #402219;
+    --wall: #6B5B2C; --wall-hi: #8C7A3E; --edge: #E8D49A; --hill1: #1D1709; --hill2: #281F0D; --ground: #33280F;
+    --slit: #0D0A04; --fire: #FF8A5C; --brass: #E3B341; --water: #2F4B52;
+    --duck: #B58E63; --duck-bill: #8A909C; --duck-line: #F2F5FA;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #17120A; --surface: #221B0E; --ink: #F3E3B0; --muted: #BFA866; --line: #4A3C18;
+  --accent: #E0B84A; --accent-text: #EBC96A; --accent-soft: #3A2E10; --on-accent: #1A1304; --bad: #FF9A7A; --bad-soft: #402219;
+  --wall: #6B5B2C; --wall-hi: #8C7A3E; --edge: #E8D49A; --hill1: #1D1709; --hill2: #281F0D; --ground: #33280F;
+  --slit: #0D0A04; --fire: #FF8A5C; --brass: #E3B341; --water: #2F4B52;
+  --duck: #B58E63; --duck-bill: #8A909C; --duck-line: #F2F5FA;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 17px; line-height: 1.6;
+  padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 64px; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; text-wrap: balance; margin: 0; line-height: 1.12; }
+h1 { font-size: clamp(2.5rem, 9vw, 4.4rem); letter-spacing: -0.01em; }
+h2 { font-size: clamp(1.7rem, 5vw, 2.3rem); scroll-margin-top: 16px; }
+h3 { font-size: 1.25rem; }
+p { margin: 0; }
+.eyebrow { font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); font-weight: 700; }
+.lede { font-size: 1.22rem; max-width: 34em; }
+.hero { display: flex; flex-direction: column; gap: 16px; padding-top: 12px; }
+.sec { display: flex; flex-direction: column; gap: 20px; }
+.sec > p { max-width: 38em; color: var(--muted); }
+.jump { display: flex; flex-wrap: wrap; gap: 8px; }
+.jump a { font-size: 0.9rem; font-weight: 600; color: var(--ink); text-decoration: none; border: 1px solid var(--line); border-radius: 0; padding: 6px 12px; }
+.jump a:hover { border-color: var(--accent); color: var(--accent); }
+.jump a:focus-visible, .tabs button:focus-visible, .f:focus-visible, .q-btn:focus-visible, .opts button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* Timeline */
+.tl { list-style: none; margin: 0 0 0 6px; padding: 0; display: flex; flex-direction: column; max-width: 46em; border-left: 2px solid var(--line); }
+.tl li { position: relative; padding: 0 0 28px 24px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.tl li:last-child { padding-bottom: 0; }
+.tl li::before { content: ""; position: absolute; left: -8px; top: 8px; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 3px solid var(--bg); }
+.tl .when { font-family: var(--font-display); font-weight: 600; font-size: 1.35rem; line-height: 1.2; }
+.tl strong { font-size: 1.05rem; }
+.tl p { color: var(--muted); }
+
+/* Diagrams */
+.stage { background: var(--surface); border: 1px solid var(--line); border-radius: 0; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.stage svg { width: 100%; height: auto; display: block; }
+.axis { display: flex; justify-content: space-between; gap: 12px; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.shape { fill: var(--wall); stroke: var(--edge); stroke-width: 1.5; transition: fill .2s, stroke .2s; }
+.slit { fill: var(--slit); }
+.hill1 { fill: var(--hill1); } .hill2 { fill: var(--hill2); } .ground { fill: var(--ground); }
+.wall-edge { fill: none; stroke: var(--edge); stroke-width: 14; stroke-linecap: round; stroke-linejoin: round; transition: stroke .2s; }
+.wall-body { fill: none; stroke: var(--wall); stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
+.fire { fill: var(--fire); }
+.smoke { fill: none; stroke: var(--muted); stroke-width: 3; stroke-linecap: round; }
+.core { fill: var(--wall-hi); stroke: var(--edge); stroke-width: 1; stroke-dasharray: 4 4; }
+.dim { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+.dimtext { fill: var(--muted); font: 600 14px var(--font-body); }
+.mk circle { fill: var(--accent); }
+.mk text { fill: var(--on-accent); font: 700 15px var(--font-body); text-anchor: middle; dominant-baseline: central; }
+.lead { stroke: var(--accent); stroke-width: 2; }
+.f { cursor: pointer; transition: opacity .2s; }
+svg[data-active] .f:not(.is-active) { opacity: .55; }
+.f.is-active .shape { stroke: var(--accent); stroke-width: 3; }
+.f.is-active .wall-edge { stroke: var(--accent); }
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.tabs button { font: inherit; font-size: 0.95rem; font-weight: 600; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 0; padding: 8px 14px; cursor: pointer; min-height: 40px; }
+.tabs button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.panel { display: flex; flex-direction: column; gap: 10px; border-top: 1px solid var(--line); padding-top: 14px; }
+.panel .stops { font-size: 0.95rem; color: var(--accent); font-weight: 600; }
+.panel p { max-width: 42em; }
+.src { font-size: 0.9rem; color: var(--muted); }
+.src a, .sources a { color: var(--accent); text-underline-offset: 3px; }
+.legend { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 12px 28px; }
+.legend li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: start; }
+.legend b { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: var(--on-accent); display: grid; place-items: center; font-size: 0.9rem; }
+.legend span { color: var(--muted); }
+
+/* Cards, rows, stats */
+.pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 32px; }
+.pair > div { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.pair p { color: var(--muted); }
+.rows { border-bottom: 1px solid var(--line); }
+.row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr); gap: 8px 32px; padding: 18px 0; border-top: 1px solid var(--line); }
+.row p { color: var(--muted); }
+@media (max-width: 560px) { .row { grid-template-columns: minmax(0, 1fr); } }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 24px 32px; }
+.stat { border-top: 1px solid var(--line); padding-top: 10px; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.stat b { font-family: var(--font-display); font-weight: 600; font-size: 2.1rem; line-height: 1.1; color: var(--accent); font-variant-numeric: tabular-nums; }
+.stat span { color: var(--muted); font-size: 0.95rem; }
+.note { max-width: 42em; border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; color: var(--muted); }
+.note b { color: var(--ink); }
+dl.gloss { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 20px 32px; }
+dl.gloss div { min-width: 0; border-top: 1px solid var(--line); padding-top: 10px; }
+dl.gloss dt { font-family: var(--font-display); font-weight: 600; font-size: 1.15rem; }
+dl.gloss dd { margin: 2px 0 0; color: var(--muted); font-size: 0.95rem; }
+
+/* Quiz */
+.quiz { background: var(--surface); border: 1px solid var(--line); border-radius: 0; padding: 18px; display: flex; flex-direction: column; gap: 16px; max-width: 680px; }
+.q-top { display: flex; justify-content: space-between; gap: 12px; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.q-bar { height: 4px; background: var(--line); border-radius: 0; overflow: hidden; }
+.q-bar i { display: block; height: 100%; background: var(--accent); transition: width .3s; }
+.quiz h3 { font-size: 1.4rem; line-height: 1.25; }
+.opts { display: flex; flex-direction: column; gap: 8px; }
+.opts button { text-align: left; font: inherit; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 0; padding: 12px 14px; cursor: pointer; min-height: 46px; }
+.opts button:hover:not(:disabled) { border-color: var(--accent); }
+.opts button:disabled { cursor: default; }
+.opts button.right { border-color: var(--accent); background: var(--accent-soft); }
+.opts button.wrong { border-color: var(--bad); background: var(--bad-soft); }
+.q-feedback { display: flex; flex-direction: column; gap: 6px; }
+.q-feedback strong { font-size: 1.05rem; }
+.q-feedback p { color: var(--muted); }
+.q-btn { align-self: flex-start; font: inherit; font-weight: 600; color: var(--on-accent); background: var(--accent); border: 0; border-radius: 0; padding: 10px 20px; min-height: 44px; cursor: pointer; }
+.q-score { font-family: var(--font-display); font-weight: 600; font-size: clamp(3rem, 12vw, 4.5rem); line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; }
+
+/* References */
+.ref { font-size: 0.75em; vertical-align: super; line-height: 0; color: var(--accent); text-decoration: none; margin-left: 2px; font-weight: 600; }
+.ref:hover { text-decoration: underline; }
+.sources { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; max-width: 44em; border-top: 1px solid var(--line); }
+.sources li { display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: 4px 8px; padding: 14px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 16px; }
+.sources li:target { background: var(--accent-soft); }
+.sources .n { color: var(--muted); font-variant-numeric: tabular-nums; }
+.sources a { font-weight: 600; overflow-wrap: anywhere; }
+.sources .for { grid-column: 2; color: var(--muted); font-size: 0.95rem; }
+footer { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; }
+
+/* Night-watch overrides */
+body { font-size: 17px; line-height: 1.65; padding-block: 32px 64px; }
+.shell { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+.wrap { max-width: none; margin: 0; gap: 72px; min-width: 0; }
+.side { min-width: 0; }
+.sidehead { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; font-weight: 600; }
+.jump { display: flex; flex-wrap: wrap; gap: 8px; }
+.jump a { font-family: var(--font-body); font-size: 0.9rem; font-weight: 500; border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; background: var(--surface); color: var(--ink); }
+.jump a:hover { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+@media (min-width: 900px) {
+  .shell { grid-template-columns: 190px minmax(0, 1fr); gap: 56px; }
+  .side { position: sticky; top: 24px; align-self: start; }
+  .jump { flex-direction: column; flex-wrap: nowrap; gap: 2px; }
+  .jump a { border: 0; border-left: 3px solid var(--line); border-radius: 0; background: transparent; padding: 6px 12px; font-size: 0.95rem; }
+  .jump a:hover { background: transparent; color: var(--accent); border-left-color: var(--accent); }
+}
+h1, h2, h3 { font-weight: 400; letter-spacing: 0; text-transform: none; }
+h1 { font-family: var(--font-display); font-size: clamp(2.6rem, 9vw, 4.8rem); line-height: 1.02; letter-spacing: -0.02em; }
+h2 { font-family: var(--font-display); font-size: clamp(1.6rem, 5vw, 2.1rem); line-height: 1.1; padding-left: 16px; border-left: 6px solid var(--accent); }
+h3 { font-family: var(--font-body); font-weight: 600; font-size: 1.15rem; }
+.eyebrow { font-family: var(--font-body); font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+.lede { font-size: 1.25rem; color: var(--ink); max-width: 32em; }
+.sec > p { max-width: 40em; }
+.axis { font-size: 0.8rem; letter-spacing: 0.04em; text-transform: none; }
+.q-top { font-size: 0.85rem; letter-spacing: 0.04em; text-transform: none; }
+.stage, .quiz, .case { border: 0; border-radius: 18px; background: var(--surface); box-shadow: 0 1px 2px rgba(16, 23, 39, 0.08), 0 8px 24px rgba(16, 23, 39, 0.06); padding: 20px; }
+.tabs button { font-weight: 500; font-size: 0.92rem; border-radius: 999px; padding: 8px 16px; }
+.opts button { border-radius: 12px; font-size: 1rem; }
+.q-btn { border-radius: 999px; padding: 10px 24px; }
+.stat { border: 0; border-radius: 14px; background: var(--surface); padding: 16px; box-shadow: 0 1px 2px rgba(16, 23, 39, 0.08); }
+.stat b { font-family: var(--font-display); font-weight: 400; font-size: 2rem; color: var(--accent); }
+.stat span { font-size: 0.92rem; }
+.tl { border-left: 2px dashed var(--line); margin-left: 8px; }
+.tl li::before { border-radius: 2px; transform: rotate(45deg); width: 12px; height: 12px; left: -7px; top: 9px; border: 0; background: var(--accent); }
+.tl .when { font-family: var(--font-body); font-weight: 600; font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+.tl strong { font-family: var(--font-display); font-weight: 400; font-size: 1.2rem; }
+.row { border-top: 1px solid var(--line); }
+.note { border-left: 6px solid var(--accent); border-radius: 0 12px 12px 0; background: var(--surface); padding: 14px 18px; }
+dl.gloss div { border: 0; border-radius: 12px; background: var(--surface); padding: 12px 14px; }
+dl.gloss dt { font-family: var(--font-body); font-weight: 600; font-size: 1rem; }
+.legend b { border-radius: 8px; font-family: var(--font-body); }
+.q-score { font-family: var(--font-display); font-weight: 400; }
+.panel .stops { font-weight: 600; font-size: 0.9rem; }
+.ref { font-weight: 600; }
+.sources li:target { border-radius: 8px; }
+footer { font-size: 0.85rem; }
+/* Orange accents on yellow */
+.eyebrow { display: inline-block; align-self: flex-start; background: var(--accent); color: var(--on-accent); padding: 4px 12px; border-radius: 999px; }
+.tl .when, .stat b, .ref, .src a, .sources a, .panel .stops { color: var(--accent-text); }
+.stage, .quiz, .case { border: 2px solid var(--accent); }
+.stat { border-top: 5px solid var(--accent); }
+.jump a { border-color: var(--accent); }
+.jump a:hover { color: var(--on-accent); }
+@media (min-width: 900px) {
+  .jump a { border-color: transparent; border-left: 3px solid var(--accent); }
+  .jump a:hover { color: var(--accent-text); border-left-color: var(--accent-text); }
+}
+.sidehead { color: var(--accent-text); }
+.legend b, .mk text { color: var(--on-accent); }
+
+.srclink { font-size: 0.82em; color: var(--accent-text); text-decoration: underline; text-underline-offset: 2px; margin-left: 0.25em; }
+.srclink:hover { text-decoration-thickness: 2px; }
+.srclink:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* Teleport */
+.tp { position: fixed; inset: 0; z-index: 90; pointer-events: none; display: none; background: var(--accent); }
+.tp::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at var(--tx, 50%) var(--ty, 50%), rgba(255, 255, 255, 0.85) 0, rgba(255, 255, 255, 0) 24%); }
+
+[hidden] { display: none !important; }
+body { margin: 0; }
+/* Compass page */
+h1, h2 { font-weight: 800; }
+h1 { letter-spacing: -0.025em; }
+.stat b, .q-score { font-weight: 700; }
+.tl strong { font-weight: 700; font-size: 1.15rem; }
+.ring { fill: none; stroke: var(--edge); stroke-width: 1.5; }
+.tick { stroke: var(--edge); stroke-width: 2; stroke-linecap: round; }
+.brass { fill: var(--brass); stroke: var(--edge); stroke-width: 1.5; transition: stroke .2s; }
+.pool { fill: var(--water); stroke: var(--edge); stroke-width: 1.5; }
+.iron { fill: var(--edge); }
+.needleN { fill: var(--fire); stroke: var(--edge); stroke-width: 1; }
+.needleS { fill: var(--wall-hi); stroke: var(--edge); stroke-width: 1; }
+.thread { stroke: var(--muted); stroke-width: 2; fill: none; }
+.glass { fill: var(--hill1); stroke: var(--edge); stroke-width: 1.5; }
+.f.is-active .brass, .f.is-active .pool { stroke: var(--accent); stroke-width: 3; }
+.f.is-active .glass { stroke: var(--accent); stroke-width: 3; }
+.svgwrap svg { max-height: 300px; }
+
+/* Ledger style */
+body { font-size: 17px; line-height: 1.6; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); background: var(--bg); z-index: 40; }
+.shell { max-width: 760px; margin: 0 auto; display: block; }
+.wrap { gap: 64px; }
+.side { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); border-bottom: 2px solid var(--ink); padding: 10px 0; margin-bottom: 40px; min-width: 0; align-self: auto; }
+.sidehead { display: none; }
+.jump { display: flex; flex-direction: row; flex-wrap: nowrap; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+.jump::-webkit-scrollbar { display: none; }
+.jump a { flex: none; white-space: nowrap; border: 2px solid var(--ink); border-radius: 0; background: var(--surface); color: var(--ink); font-family: var(--font-mono); font-size: 0.78rem; font-weight: 700; padding: 6px 12px; }
+.jump a:hover { background: var(--accent); color: var(--on-accent); border-color: var(--ink); }
+@media (min-width: 900px) {
+  .shell { display: block; }
+  .side { position: sticky; top: env(safe-area-inset-top, 0px); align-self: auto; }
+  .jump { flex-direction: row; flex-wrap: nowrap; gap: 8px; }
+  .jump a { border: 2px solid var(--ink); border-left: 2px solid var(--ink); border-radius: 0; background: var(--surface); padding: 6px 12px; font-size: 0.78rem; }
+  .jump a:hover { background: var(--accent); color: var(--on-accent); border-left-color: var(--ink); }
+}
+h1, h2 { font-family: var(--font-display); font-weight: 700; text-transform: none; letter-spacing: -0.03em; }
+h1 { font-size: clamp(2rem, 8vw, 3.6rem); line-height: 1.05; }
+h2 { font-size: clamp(1.4rem, 4.6vw, 1.8rem); line-height: 1.15; padding: 14px 0 0; border-left: 0; border-top: 4px solid var(--ink); scroll-margin-top: 84px; }
+h3 { font-family: var(--font-body); font-weight: 700; font-size: 1.1rem; }
+.eyebrow { background: var(--brass); color: #2A2008; border-radius: 0; font-family: var(--font-mono); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 10px; border: 2px solid var(--ink); }
+.lede { font-size: 1.15rem; }
+.stage, .quiz, .case { border: 2px solid var(--ink); border-radius: 0; background: var(--surface); box-shadow: 6px 6px 0 var(--accent); padding: 18px; }
+.tabs button { border: 2px solid var(--ink); border-radius: 0; font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; padding: 8px 12px; background: transparent; }
+.tabs button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--ink); }
+.opts button { border: 2px solid var(--ink); border-radius: 0; }
+.opts button.right { background: var(--accent-soft); border-color: var(--accent); }
+.q-btn { border: 2px solid var(--ink); border-radius: 0; font-family: var(--font-mono); font-weight: 700; padding: 10px 20px; }
+.q-bar, .q-bar i { border-radius: 0; }
+.axis, .q-top { font-family: var(--font-mono); font-size: 0.72rem; }
+.panel { border-top: 2px solid var(--ink); }
+.panel .stops { font-family: var(--font-mono); font-size: 0.8rem; }
+.svgwrap svg { max-height: 280px; }
+
+/* Timeline as ruled rows */
+.tl { border-left: 0; margin: 0; max-width: none; gap: 0; border-bottom: 2px solid var(--ink); }
+.tl li { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 2px 28px; padding: 18px 0; border-top: 2px solid var(--ink); }
+.tl li::before { display: none; }
+.tl .when { grid-row: 1 / span 2; font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; letter-spacing: 0; text-transform: none; color: var(--accent-text); align-self: start; padding-top: 3px; }
+.tl strong { grid-column: 2; font-family: var(--font-body); font-size: 1.15rem; }
+.tl p { grid-column: 2; }
+@media (max-width: 600px) {
+  .tl li { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .tl .when { grid-row: auto; padding-top: 0; }
+  .tl strong, .tl p { grid-column: 1; }
+}
+
+/* Facts as a ledger */
+.rows { border-bottom: 2px solid var(--ink); }
+.row { border-top: 2px solid var(--ink); }
+.stats { gap: 0; border: 2px solid var(--ink); background: var(--surface); }
+.stat { border: 0; border-radius: 0; box-shadow: none; background: transparent; padding: 14px 16px; border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); margin: 0 -2px -2px 0; }
+.stat b { font-family: var(--font-mono); font-size: 1.7rem; font-weight: 700; color: var(--ink); letter-spacing: -0.03em; }
+.stat span { font-size: 0.9rem; }
+.pair { gap: 24px 32px; }
+.pair > div { border-top: 2px solid var(--ink); padding-top: 12px; }
+.note { border: 2px dashed var(--ink); border-radius: 0; background: transparent; padding: 14px 16px; }
+dl.gloss { gap: 0; border: 2px solid var(--ink); background: var(--surface); }
+dl.gloss div { border: 0; border-radius: 0; background: transparent; padding: 12px 14px; border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); margin: 0 -2px -2px 0; }
+dl.gloss dt { font-family: var(--font-mono); font-size: 0.9rem; font-weight: 700; }
+.srclink { font-family: var(--font-body); }
+</style>
+</head>
+<body>
+
+
+<div class="shell"><aside class="side"><p class="sidehead">On this page</p><nav class="jump" aria-label="Jump to a section">
+<a href="#h-time">History</a><a href="#h-forms">Designs</a><a href="#h-first">Feng shui</a><a href="#h-sea">At sea</a><a href="#h-travel">Spread</a><a href="#h-doubt">Doubts</a><a href="#h-num">Numbers</a><a href="#h-quiz">Quiz</a>
+</nav></aside>
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow">A Chinese invention, over about a thousand years</span>
+    <h1>The South-Pointing Needle</h1>
+    <p class="lede">The first Chinese compass pointed south, and it was used to place buildings and graves long before anyone steered a ship by it.</p>
+  </header>
+
+  <section class="sec" aria-labelledby="h-time">
+    <h2 id="h-time">From a spoon to a needle</h2>
+    <p>No single person invented the compass. It grew in steps, and historians still disagree about some of them. Each date below comes from the source named beside it.</p>
+    <ol class="tl"><li><span class="when">278 to 209 BCE</span><strong>Diviners' boards</strong><p>Boards called <em>shi</em> were buried in tombs from this period. They are the oldest precursors of the markings later used on compasses, and the markings stayed virtually unchanged from the boards to the first magnetic compasses. <a class="srclink" href="https://en.wikipedia.org/wiki/Luopan" target="_blank" rel="noopener">(Wikipedia, Luopan)</a></p></li><li><span class="when">2nd century BCE to 2nd century CE</span><strong>The south-pointer</strong><p>During the Han dynasty, a spoon-shaped piece of lodestone called the <em>sinan</em> ("south-governor") appears in records. It was used for geomancy and fortune-telling, and possibly to orient buildings and choose house sites. <a class="srclink" href="https://en.wikipedia.org/wiki/History_of_the_compass" target="_blank" rel="noopener">(Wikipedia, History of the compass)</a> <a class="srclink" href="https://www.smith.edu/bigbad/historyscitech/museum/ancient_inventions/compass2.html" target="_blank" rel="noopener">(Smith College)</a></p></li><li><span class="when">About 70 to 80 CE</span><strong>Wang Chong writes it down</strong><p>In the <em>Lunheng</em>, Wang Chong records that a south-pointing spoon thrown on the ground comes to rest pointing south. One source dates the book to around 60 CE. <a class="srclink" href="https://en.wikipedia.org/wiki/History_of_the_compass" target="_blank" rel="noopener">(Wikipedia, History of the compass)</a> <a class="srclink" href="https://hakaimagazine.com/?p=29817" target="_blank" rel="noopener">(Hakai Magazine)</a></p></li><li><span class="when">7th and 8th centuries</span><strong>Needles</strong><p>By the Tang dynasty, scholars magnetised iron needles by rubbing them with magnetite. A needle could float in water, balance on a pointed shaft or hang from a silk thread. <a class="srclink" href="https://www.smith.edu/bigbad/historyscitech/museum/ancient_inventions/compass2.html" target="_blank" rel="noopener">(Smith College)</a></p></li><li><span class="when">1040 to 1044</span><strong>The iron fish</strong><p>The military manual <em>Wujing Zongyao</em> describes a heated iron fish floating in water to find south on dark nights or in gloomy weather. Zeng Gongliang was chief editor. <a class="srclink" href="https://en.wikipedia.org/wiki/Wujing_Zongyao" target="_blank" rel="noopener">(Wikipedia, Wujing Zongyao)</a> <a class="srclink" href="https://en.wikipedia.org/wiki/History_of_the_compass" target="_blank" rel="noopener">(Wikipedia, History of the compass)</a></p></li><li><span class="when">1088</span><strong>Shen Kuo's needle</strong><p>Shen Kuo's <em>Dream Pool Essays</em> describes magnetising a steel needle with lodestone and favours hanging it on a silk thread. <a class="srclink" href="https://en.wikipedia.org/wiki/Shen_Kuo" target="_blank" rel="noopener">(Wikipedia, Shen Kuo)</a> <a class="srclink" href="https://en.wikipedia.org/wiki/History_of_the_compass" target="_blank" rel="noopener">(Wikipedia, History of the compass)</a></p></li><li><span class="when">About 1117</span><strong>At sea</strong><p>Zhu Yu's <em>Pingzhou Ketan</em> says ship pilots used stars and the sun in clear weather and the south-pointing needle in dark weather. One source dates the book to 1111 to 1117, and another gives 1119 for the first reports of a compass used this way. <a class="srclink" href="https://en.wikipedia.org/wiki/History_of_the_compass" target="_blank" rel="noopener">(Wikipedia, History of the compass)</a> <a class="srclink" href="https://afe.easia.columbia.edu/songdynasty-module/tech-compass.html" target="_blank" rel="noopener">(Columbia, Asia for Educators)</a></p></li><li><span class="when">About 1190</span><strong>Europe writes about it</strong><p>Alexander Neckam gives the earliest European description of a magnetised needle used by sailors. <a class="srclink" href="https://en.wikipedia.org/wiki/Alexander_Neckam" target="_blank" rel="noopener">(Wikipedia, Alexander Neckam)</a> <a class="srclink" href="https://en.wikipedia.org/wiki/History_of_the_compass" target="_blank" rel="noopener">(Wikipedia, History of the compass)</a></p></li></ol>
+  </section>
+
+  <section class="sec" aria-labelledby="h-forms">
+    <h2 id="h-forms">Four early designs</h2>
+    <p>Tap a design to see how it worked. The drawings are simplified, and the sizes are not to scale.</p>
+    <div class="stage">
+      <div class="svgwrap">
+<svg id="forms" viewBox="0 0 760 250" role="img" aria-label="Four early compass designs side by side: a lodestone spoon on a round plate, an iron fish floating in a bowl of water, a needle hanging on a silk thread, and a needle on a pivot in a glass-topped case." data-active="spoon">
+  <g class="f f-spoon is-active" data-f="spoon">
+    <circle class="shape" cx="105" cy="125" r="82"/>
+    <circle class="ring" cx="105" cy="125" r="60"/>
+    <line class="tick" x1="105.0" y1="65.0" x2="105.0" y2="51.0"/><line class="tick" x1="147.4" y1="82.6" x2="157.3" y2="72.7"/><line class="tick" x1="165.0" y1="125.0" x2="179.0" y2="125.0"/><line class="tick" x1="147.4" y1="167.4" x2="157.3" y2="177.3"/><line class="tick" x1="105.0" y1="185.0" x2="105.0" y2="199.0"/><line class="tick" x1="62.6" y1="167.4" x2="52.7" y2="177.3"/><line class="tick" x1="45.0" y1="125.0" x2="31.0" y2="125.0"/><line class="tick" x1="62.6" y1="82.6" x2="52.7" y2="72.7"/>
+    <ellipse class="brass" cx="105" cy="106" rx="19" ry="15"/>
+    <rect class="brass" x="101" y="116" width="8" height="50" rx="3"/>
+  </g>
+  <g class="f f-fish" data-f="fish">
+    <path class="shape" d="M215,128 A80,78 0 0 0 375,128 Z"/>
+    <ellipse class="pool" cx="295" cy="128" rx="80" ry="15"/>
+    <path class="iron" d="M262,126 q14,-12 40,-2 l18,-9 v22 l-18,-9 q-26,10 -40,-2z"/>
+  </g>
+  <g class="f f-needle" data-f="needle">
+    <line class="thread" x1="485" y1="14" x2="485" y2="112"/>
+    <circle class="ring" cx="485" cy="108" r="5"/>
+    <polygon class="needleN" points="485,112 560,122 485,132"/>
+    <polygon class="needleS" points="410,122 485,112 485,132"/>
+    <ellipse class="ring" cx="485" cy="205" rx="82" ry="14"/>
+  </g>
+  <g class="f f-pivot" data-f="pivot">
+    <circle class="shape" cx="675" cy="125" r="82"/>
+    <circle class="glass" cx="675" cy="125" r="68"/>
+    <line class="tick" x1="675.0" y1="67.0" x2="675.0" y2="59.0"/><line class="tick" x1="716.0" y1="84.0" x2="721.7" y2="78.3"/><line class="tick" x1="733.0" y1="125.0" x2="741.0" y2="125.0"/><line class="tick" x1="716.0" y1="166.0" x2="721.7" y2="171.7"/><line class="tick" x1="675.0" y1="183.0" x2="675.0" y2="191.0"/><line class="tick" x1="634.0" y1="166.0" x2="628.3" y2="171.7"/><line class="tick" x1="617.0" y1="125.0" x2="609.0" y2="125.0"/><line class="tick" x1="634.0" y1="84.0" x2="628.3" y2="78.3"/>
+    <polygon class="needleN" points="675,62 684,125 666,125"/>
+    <polygon class="needleS" points="675,188 684,125 666,125"/>
+    <circle class="ring" cx="675" cy="125" r="5" style="fill:var(--surface)"/>
+  </g>
+</svg>
+</div>
+      <div class="axis"><span>Earliest designs on the left</span><span>Later designs on the right</span></div>
+      <div class="tabs" role="group" aria-label="Choose a compass design">
+        <button type="button" data-f="spoon" aria-pressed="true">Spoon on a plate</button>
+        <button type="button" data-f="fish" aria-pressed="false">Iron fish</button>
+        <button type="button" data-f="needle" aria-pressed="false">Hanging needle</button>
+        <button type="button" data-f="pivot" aria-pressed="false">Needle on a pivot</button>
+      </div>
+      <div class="panel" aria-live="polite">
+        <h3 id="p-title">Spoon on a plate</h3>
+        <p id="p-text"></p>
+        <p class="stops" id="p-stops"></p>
+        <p class="src" id="p-src"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-first">
+    <h2 id="h-first">First for feng shui, then for ships</h2>
+    <p>The earliest uses were about place and fortune, not travel. Geomancy came long before navigation. <a class="srclink" href="https://www.smith.edu/bigbad/historyscitech/museum/ancient_inventions/compass2.html" target="_blank" rel="noopener">(Smith College)</a></p>
+    <div class="pair">
+      <div>
+        <h3>The heaven plate</h3>
+        <p>The Han spoon sat on a cast bronze plate marked with the eight trigrams of the I Ching, 24 directions and 28 lunar mansions. The Big Dipper was often drawn in the centre. The square stood for earth and the circle for heaven. <a class="srclink" href="https://www.smith.edu/bigbad/historyscitech/museum/ancient_inventions/compass2.html" target="_blank" rel="noopener">(Smith College)</a></p>
+      </div>
+      <div>
+        <h3>Finding good places</h3>
+        <p>One use was finding the best location and time for burials. Early compasses may also have been used to orient buildings and choose house sites, crop areas and gem-searching locations. <a class="srclink" href="https://en.wikipedia.org/wiki/History_of_the_compass" target="_blank" rel="noopener">(Wikipedia, History of the compass)</a> <a class="srclink" href="https://www.smith.edu/bigbad/historyscitech/museum/ancient_inventions/compass2.html" target="_blank" rel="noopener">(Smith College)</a></p>
+      </div>
+      <div>
+        <h3>The luopan</h3>
+        <p>A feng shui practitioner uses a luopan to find the exact direction of a structure or place. It can have up to 40 concentric rings, and a typical one marks 24 directions of 15 degrees each. <a class="srclink" href="https://en.wikipedia.org/wiki/Luopan" target="_blank" rel="noopener">(Wikipedia, Luopan)</a></p>
+      </div>
+      <div>
+        <h3>Which way it points</h3>
+        <p>A luopan's needle points to the south magnetic pole, while a typical modern compass points to the north magnetic pole. <a class="srclink" href="https://en.wikipedia.org/wiki/Luopan" target="_blank" rel="noopener">(Wikipedia, Luopan)</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-sea">
+    <h2 id="h-sea">Taking it to sea</h2>
+    <p>Better needles made the compass useful away from land.</p>
+    <div class="rows">
+      <div class="row"><h3>A smaller, steadier needle</h3><p>In Song times the needle was made smaller and fixed on a stem instead of floating in water. Sometimes it sat in a small case with a glass top, which suited sea travel. <a class="srclink" href="https://afe.easia.columbia.edu/songdynasty-module/tech-compass.html" target="_blank" rel="noopener">(Columbia, Asia for Educators)</a></p></div>
+      <div class="row"><h3>Shen Kuo and true north</h3><p>Shen Kuo wrote that needles are always displaced slightly east rather than pointing due south. He also noted that a needle sometimes pointed south and sometimes north. <a class="srclink" href="https://en.wikipedia.org/wiki/Shen_Kuo" target="_blank" rel="noopener">(Wikipedia, Shen Kuo)</a></p></div>
+      <div class="row"><h3>Dark weather</h3><p>Zhu Yu records that pilots used the stars and sun when it was clear and the south-pointing needle when it was dark. A navigation map from Zheng He's voyages, the Mao Kun Map, contains "needle records". <a class="srclink" href="https://en.wikipedia.org/wiki/History_of_the_compass" target="_blank" rel="noopener">(Wikipedia, History of the compass)</a></p></div>
+      <div class="row"><h3>Not everyone agrees on when</h3><p>One estimate puts the Chinese maritime compass at some time before 1050, possibly as early as 850. Clear written evidence of use at sea appears only in 1117. The historian Kreutz argued that Chinese sailors used only floating needles in bowls until the 16th century, and that steering by compass did not really begin until 1410. <a class="srclink" href="https://en.wikipedia.org/wiki/History_of_the_compass" target="_blank" rel="noopener">(Wikipedia, History of the compass)</a></p></div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-travel">
+    <h2 id="h-travel">How it reached Europe and the Islamic world</h2>
+    <p>Written records appear in these places at these times. How the compass travelled between them is uncertain. <a class="srclink" href="https://en.wikipedia.org/wiki/History_of_the_compass" target="_blank" rel="noopener">(Wikipedia, History of the compass)</a></p>
+    <div class="stats">
+      <div class="stat"><b>About 1190</b><span>Alexander Neckam describes a needle used by sailors. He probably heard in Paris that ships carried a magnetised needle on a pivot. <a class="srclink" href="https://en.wikipedia.org/wiki/Alexander_Neckam" target="_blank" rel="noopener">(Wikipedia, Alexander Neckam)</a></span></div>
+      <div class="stat"><b>1232</b><span>The earliest Islamic-world reference, in the Persian talebook <em>Jawami ul-Hikayat</em>. <a class="srclink" href="https://en.wikipedia.org/wiki/History_of_the_compass" target="_blank" rel="noopener">(Wikipedia, History of the compass)</a></span></div>
+      <div class="stat"><b>1269</b><span>Petrus Peregrinus describes a dry compass for seafaring. <a class="srclink" href="https://en.wikipedia.org/wiki/History_of_the_compass" target="_blank" rel="noopener">(Wikipedia, History of the compass)</a></span></div>
+      <div class="stat"><b>1282</b><span>The earliest Arabic reference, by Baylak al-Qibjaqi. <a class="srclink" href="https://en.wikipedia.org/wiki/History_of_the_compass" target="_blank" rel="noopener">(Wikipedia, History of the compass)</a></span></div>
+    </div>
+    <p class="note"><b>How did it get there?</b> Some historians think Arabs introduced it to Europe. Others propose transmission across the Indian Ocean or through the Crusades, and some propose that Europeans invented it themselves. <a class="srclink" href="https://en.wikipedia.org/wiki/History_of_the_compass" target="_blank" rel="noopener">(Wikipedia, History of the compass)</a></p>
+  </section>
+
+  <section class="sec" aria-labelledby="h-doubt">
+    <h2 id="h-doubt">What we do not know</h2>
+    <div class="pair">
+      <div>
+        <h3>Was the spoon a compass?</h3>
+        <p>Wang Chong's passage does not mention magnetism. The idea that the spoon was the earliest magnetic compass is widely held, but it rests on his written description. <a class="srclink" href="https://en.wikipedia.org/wiki/History_of_the_compass" target="_blank" rel="noopener">(Wikipedia, History of the compass)</a></p>
+      </div>
+      <div>
+        <h3>Does a Han spoon survive?</h3>
+        <p>The Hakai article describes no surviving Han-era spoon and no test of one. Its only working example is a 1999 replica made from sheet steel by a Smith College student, which has since lost its magnetism. <a class="srclink" href="https://hakaimagazine.com/?p=29817" target="_blank" rel="noopener">(Hakai Magazine)</a></p>
+      </div>
+      <div>
+        <h3>Was the compass only Chinese?</h3>
+        <p>The compass is credited to China, but its development is described as "highly uncertain". The history page also notes some scholars propose independent invention in Europe. <a class="srclink" href="https://en.wikipedia.org/wiki/History_of_the_compass" target="_blank" rel="noopener">(Wikipedia, History of the compass)</a></p>
+      </div>
+      <div>
+        <h3>Did the iron fish last?</h3>
+        <p>The iron fish was magnetised by heating, which gave only weak magnetisation. After Shen Kuo's magnetised needle, this thermoremanence compass fell out of use. <a class="srclink" href="https://en.wikipedia.org/wiki/Wujing_Zongyao" target="_blank" rel="noopener">(Wikipedia, Wujing Zongyao)</a> <a class="srclink" href="https://en.wikipedia.org/wiki/History_of_the_compass" target="_blank" rel="noopener">(Wikipedia, History of the compass)</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-num">
+    <h2 id="h-num">Numbers</h2>
+    <div class="stats">
+      <div class="stat"><b>2 inches</b><span>length of the iron fish in the <em>Wujing Zongyao</em>. <a class="srclink" href="https://en.wikipedia.org/wiki/Wujing_Zongyao" target="_blank" rel="noopener">(Wikipedia, Wujing Zongyao)</a></span></div>
+      <div class="stat"><b>24 × 15°</b><span>directions on a typical luopan, each covering 15 degrees. <a class="srclink" href="https://en.wikipedia.org/wiki/Luopan" target="_blank" rel="noopener">(Wikipedia, Luopan)</a></span></div>
+      <div class="stat"><b>Up to 40</b><span>concentric rings of feng shui formulas on a luopan. <a class="srclink" href="https://en.wikipedia.org/wiki/Luopan" target="_blank" rel="noopener">(Wikipedia, Luopan)</a></span></div>
+      <div class="stat"><b>About 100 years</b><span>between Shen Kuo's needle (1088) and Neckam's European description (about 1190). <a class="srclink" href="https://en.wikipedia.org/wiki/Shen_Kuo" target="_blank" rel="noopener">(Wikipedia, Shen Kuo)</a> <a class="srclink" href="https://en.wikipedia.org/wiki/Alexander_Neckam" target="_blank" rel="noopener">(Wikipedia, Alexander Neckam)</a></span></div>
+      <div class="stat"><b>28</b><span>lunar mansions marked on the Han heaven plate. <a class="srclink" href="https://www.smith.edu/bigbad/historyscitech/museum/ancient_inventions/compass2.html" target="_blank" rel="noopener">(Smith College)</a></span></div>
+      <div class="stat"><b>1999</b><span>year a Smith College student made a replica Han spoon. <a class="srclink" href="https://hakaimagazine.com/?p=29817" target="_blank" rel="noopener">(Hakai Magazine)</a></span></div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-quiz">
+    <h2 id="h-quiz">Test yourself</h2>
+    <p>Ten questions on what you just read. Pick an answer to see why it is right or wrong.</p>
+    <div class="quiz" id="quiz"></div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-gloss">
+    <h2 id="h-gloss">Terms</h2>
+    <dl class="gloss">
+      <div><dt>Sinan</dt><dd>"South-governor" or "south-pointer", the Han name for the lodestone spoon.</dd></div>
+      <div><dt>Lodestone</dt><dd>A naturally magnetic rock, a form of magnetite ore.</dd></div>
+      <div><dt>Thermoremanence</dt><dd>Magnetism gained by heating iron and letting it cool in line with the Earth's field. It is weak.</dd></div>
+      <div><dt>Declination</dt><dd>The angle between where a compass needle points and true north or south.</dd></div>
+      <div><dt>Geomancy</dt><dd>Choosing sites and times by reading the land and the heavens. Feng shui is one form.</dd></div>
+      <div><dt>Luopan</dt><dd>The feng shui compass, with a rotating dial and many rings of formulas.</dd></div>
+      <div><dt>Heaven plate</dt><dd>The bronze board the Han spoon sat on, marked with directions and star groups.</dd></div>
+      <div><dt>Dry compass</dt><dd>A compass whose needle sits on a pivot instead of floating in water.</dd></div>
+    </dl>
+  </section>
+</div></div>
+<script>
+(function () {
+  var DATA = {
+    spoon: { t: "Spoon on a plate", p: "A spoon-shaped piece of lodestone, the sinan, was thrown or set on a bronze heaven plate. Wang Chong wrote that it came to rest pointing south. His passage does not mention magnetism, and no Han spoon survives, so scholars still debate whether it was a compass.", s: "Used for: divination and geomancy", src: [["Wikipedia, History of the compass", "https://en.wikipedia.org/wiki/History_of_the_compass"], ["Hakai Magazine", "https://hakaimagazine.com/?p=29817"], ["Smith College", "https://www.smith.edu/bigbad/historyscitech/museum/ancient_inventions/compass2.html"]] },
+    fish: { t: "Iron fish", p: "An iron leaf was cut into a fish about two inches long, heated red hot in a charcoal fire and quenched with its tail in water, so the tail pointed north. Laid flat on water in a windless place, the head pointed south. It was meant for dark nights and gloomy weather, and the magnetisation it gave was weak.", s: "Used for: finding direction at night, 1040 to 1044", src: [["Wikipedia, Wujing Zongyao", "https://en.wikipedia.org/wiki/Wujing_Zongyao"], ["Wikipedia, History of the compass", "https://en.wikipedia.org/wiki/History_of_the_compass"]] },
+    needle: { t: "Hanging needle", p: "Shen Kuo wrote in 1088 that steel needles become magnetised when rubbed with lodestone. He favoured hanging the needle on a silk thread as the best form, and noted that it pointed either south or north.", s: "Used for: a steadier reading than a floating needle", src: [["Wikipedia, Shen Kuo", "https://en.wikipedia.org/wiki/Shen_Kuo"], ["Wikipedia, History of the compass", "https://en.wikipedia.org/wiki/History_of_the_compass"]] },
+    pivot: { t: "Needle on a pivot", p: "In Song times the needle was made smaller and fixed on a stem instead of floating in water. In some cases it sat in a small case with a glass top, which suited sea travel. The first reports of a compass used this way date to 1119 in one source.", s: "Used for: travel at sea", src: [["Columbia, Asia for Educators", "https://afe.easia.columbia.edu/songdynasty-module/tech-compass.html"], ["Wikipedia, History of the compass", "https://en.wikipedia.org/wiki/History_of_the_compass"]] }
+  };
+  var svg = document.getElementById("forms");
+  var btns = document.querySelectorAll(".tabs button");
+  var groups = svg.querySelectorAll(".f");
+  var title = document.getElementById("p-title");
+  var text = document.getElementById("p-text");
+  var stops = document.getElementById("p-stops");
+  var srcEl = document.getElementById("p-src");
+
+  function show(id) {
+    var d = DATA[id];
+    if (!d) return;
+    svg.setAttribute("data-active", id);
+    groups.forEach(function (g) { g.classList.toggle("is-active", g.classList.contains("f-" + id)); });
+    btns.forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-f") === id ? "true" : "false"); });
+    title.textContent = d.t;
+    text.textContent = d.p;
+    stops.textContent = d.s;
+    srcEl.textContent = "Source: ";
+    d.src.forEach(function (s, i) {
+      if (i > 0) srcEl.appendChild(document.createTextNode(" and "));
+      var a = document.createElement("a");
+      a.href = s[1]; a.target = "_blank"; a.rel = "noopener"; a.textContent = s[0];
+      srcEl.appendChild(a);
+    });
+  }
+  btns.forEach(function (b) { b.addEventListener("click", function () { show(b.getAttribute("data-f")); }); });
+  groups.forEach(function (g) { g.addEventListener("click", function () { show(g.getAttribute("data-f")); }); });
+  show("spoon");
+})();
+(function () {
+  var Q = [
+    { q: "What was the sinan?", o: ["A kind of ship", "A spoon-shaped piece of lodestone, the south-pointer", "A map of the stars", "A type of silk thread"], a: 1, why: "The sinan, meaning south-governor or south-pointer, was a spoon of lodestone that appears in Han dynasty records." },
+    { q: "What does Wang Chong's passage about the south-pointing spoon NOT mention?", o: ["Throwing it on the ground", "That it points south", "Magnetism", "A spoon"], a: 2, why: "The passage does not mention magnetism, which is one reason historians still debate whether the spoon was a compass." },
+    { q: "Before sailors used it, what was the compass mainly used for?", o: ["Divination and geomancy", "Telling time", "Measuring distance", "Cooking"], a: 0, why: "Geomancy came long before navigation. Early compasses helped choose sites for burials and houses and orient buildings." },
+    { q: "How was the iron fish in the Wujing Zongyao magnetised?", o: ["By rubbing it with silk", "By dropping it from a height", "By heating it red hot and quenching it", "By leaving it in the sun"], a: 2, why: "It was heated in a charcoal fire and quenched with its tail in water. This thermoremanence gave only weak magnetisation." },
+    { q: "How did Shen Kuo's 1088 needle differ from the iron fish?", o: ["It was rubbed with lodestone and hung on a silk thread", "It was made of wood", "It floated on a bowl of oil", "It was much larger"], a: 0, why: "Shen Kuo described steel needles magnetised by rubbing with lodestone, and favoured hanging one on a silk thread." },
+    { q: "What did Shen Kuo notice about the needle?", o: ["It always pointed due north", "It was always displaced slightly east of due south", "It spun without stopping", "It only worked at night"], a: 1, why: "He wrote that needles are always displaced slightly east rather than pointing due south." },
+    { q: "According to Zhu Yu, when did ship pilots use the south-pointing needle?", o: ["In clear weather", "Only in harbour", "In dark weather", "Never"], a: 2, why: "Pilots used the stars and sun in clear weather and the south-pointing needle in dark weather." },
+    { q: "Who gave the earliest European description of a needle used by sailors?", o: ["Marco Polo", "Alexander Neckam, about 1190", "Christopher Columbus", "Petrus Peregrinus in 1269"], a: 1, why: "Neckam's De naturis rerum, written about 1190, is the earliest European notice. Peregrinus described a dry compass later, in 1269." },
+    { q: "How many directions does a typical luopan mark?", o: ["4", "8", "12", "24, each 15 degrees"], a: 3, why: "A conventional compass marks four or eight directions. A typical luopan marks 24, each covering 15 degrees." },
+    { q: "What do historians say about how the compass reached Europe?", o: ["It is certain it came by Arab traders", "It is certain it came by ship from China", "It is uncertain, with several competing ideas", "It was never used in Europe"], a: 2, why: "Some think Arabs introduced it, others propose the Indian Ocean or the Crusades, and some propose independent European invention." }
+  ];
+  var root = document.getElementById("quiz");
+  var i = 0, score = 0;
+
+  function mk(tag, cls, txt) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (txt !== undefined) e.textContent = txt;
+    return e;
+  }
+
+  function render() {
+    root.textContent = "";
+    if (i >= Q.length) return finish();
+    var item = Q[i];
+
+    var top = mk("div", "q-top");
+    top.appendChild(mk("span", "", "Question " + (i + 1) + " of " + Q.length));
+    top.appendChild(mk("span", "", "Score " + score));
+    var bar = mk("div", "q-bar");
+    var fill = mk("i");
+    fill.style.width = (i / Q.length * 100) + "%";
+    bar.appendChild(fill);
+
+    var opts = mk("div", "opts");
+    var fb = mk("div", "q-feedback");
+    fb.setAttribute("aria-live", "polite");
+    var btns = [];
+
+    item.o.forEach(function (text, k) {
+      var b = mk("button", "", text);
+      b.type = "button";
+      b.addEventListener("click", function () {
+        btns.forEach(function (x) { x.disabled = true; });
+        var ok = k === item.a;
+        if (ok) score++;
+        b.classList.add(ok ? "right" : "wrong");
+        btns[item.a].classList.add("right");
+        fb.appendChild(mk("strong", "", ok ? "Correct." : "Not quite."));
+        fb.appendChild(mk("p", "", item.why));
+        var next = mk("button", "q-btn", i + 1 < Q.length ? "Next question" : "See my score");
+        next.type = "button";
+        next.addEventListener("click", function () { i++; render(); });
+        fb.appendChild(next);
+        next.focus();
+        fill.style.width = ((i + 1) / Q.length * 100) + "%";
+      });
+      btns.push(b);
+      opts.appendChild(b);
+    });
+
+    root.appendChild(top);
+    root.appendChild(bar);
+    root.appendChild(mk("h3", "", item.q));
+    root.appendChild(opts);
+    root.appendChild(fb);
+  }
+
+  function finish() {
+    var msg = score === Q.length ? "Flawless. You know your compass history." :
+              score >= 7 ? "Strong work. A few gaps to patch." :
+              score >= 4 ? "Getting there. Read the history again and retry." :
+              "Not yet. Read through the sections above and try again.";
+    root.appendChild(mk("div", "q-top")).appendChild(mk("span", "", "Finished"));
+    root.appendChild(mk("div", "q-score", score + " / " + Q.length));
+    root.appendChild(mk("p", "", msg));
+    var again = mk("button", "q-btn", "Try again");
+    again.type = "button";
+    again.addEventListener("click", function () { i = 0; score = 0; render(); });
+    root.appendChild(again);
+  }
+
+  render();
+})();
+
+(function () {
+  var links = document.querySelectorAll(".jump a[href^='#']");
+  if (!links.length) return;
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var veil = document.createElement("div");
+  veil.className = "tp";
+  veil.setAttribute("aria-hidden", "true");
+  document.body.appendChild(veil);
+  var busy = false;
+
+  function go(target) {
+    target.scrollIntoView({ behavior: "auto", block: "start" });
+    if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+    try { target.focus({ preventScroll: true }); } catch (e) {}
+  }
+
+  links.forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      var target = document.getElementById(a.getAttribute("href").slice(1));
+      if (!target) return;
+      e.preventDefault();
+      if (reduce || !veil.animate || busy) { go(target); return; }
+      busy = true;
+      var x = e.clientX || window.innerWidth / 2;
+      var y = e.clientY || window.innerHeight / 2;
+      veil.style.display = "block";
+      veil.style.setProperty("--tx", x + "px");
+      veil.style.setProperty("--ty", y + "px");
+      var big = "circle(150vmax at " + x + "px " + y + "px)";
+      var closeIn = veil.animate(
+        [{ clipPath: "circle(0px at " + x + "px " + y + "px)" }, { clipPath: big }],
+        { duration: 320, easing: "ease-in", fill: "forwards" }
+      );
+      closeIn.onfinish = function () {
+        go(target);
+        var r = target.getBoundingClientRect();
+        var tx = Math.min(Math.max(r.left + 40, 0), window.innerWidth);
+        var ty = Math.min(Math.max(r.top + r.height / 2, 0), window.innerHeight);
+        veil.style.setProperty("--tx", tx + "px");
+        veil.style.setProperty("--ty", ty + "px");
+        var openOut = veil.animate(
+          [{ clipPath: "circle(150vmax at " + tx + "px " + ty + "px)" }, { clipPath: "circle(0px at " + tx + "px " + ty + "px)" }],
+          { duration: 420, easing: "ease-out", fill: "forwards" }
+        );
+        openOut.onfinish = function () {
+          veil.style.display = "none";
+          closeIn.cancel(); openOut.cancel();
+          busy = false;
+        };
+      };
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
